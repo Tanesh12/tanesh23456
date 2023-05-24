@@ -1,0 +1,34 @@
+def solution(N, P, Q):
+    primes = sieve(N)
+    semiprimes = [0] * (N + 1)
+    semiprime_count = [0] * (N + 1)
+    result = []
+
+    for i in range(2, N + 1):
+        if primes[i] != 0 and primes[i // primes[i]] == 0:
+            semiprimes[i] = 1
+
+    for i in range(1, N + 1):
+        semiprime_count[i] = semiprime_count[i - 1] + semiprimes[i]
+
+    for i in range(len(P)):
+        count = semiprime_count[Q[i]] - semiprime_count[P[i] - 1]
+        result.append(count)
+
+    return result
+
+
+def sieve(N):
+    primes = [0] * (N + 1)
+    i = 2
+
+    while i * i <= N:
+        if primes[i] == 0:
+            k = i * i
+            while k <= N:
+                if primes[k] == 0:
+                    primes[k] = i
+                k += i
+        i += 1
+
+    return primes
